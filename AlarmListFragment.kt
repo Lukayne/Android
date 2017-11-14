@@ -10,6 +10,7 @@ import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentActivity
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,6 +23,9 @@ import kotlinx.android.synthetic.main.fragment_alarm_list.*
  * A simple [Fragment] subclass.
  */
 class AlarmListFragment : LifecycleFragment() {
+    companion object {
+        val TAG = "AlarmListFragment"
+    }
 
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -61,7 +65,7 @@ class AlarmListFragment : LifecycleFragment() {
         override fun onBindViewHolder(holder: AlarmViewHolder?, position: Int) {
             val alarm = alarms[position]
             holder?.alarmKey = alarm.key
-            holder?.alarmName?.text = alarm.name
+            holder?.alarmName?.text = alarm.name + "  :   " + alarm.time
 
         }
 
@@ -84,12 +88,13 @@ class AlarmListFragment : LifecycleFragment() {
             val alarmDetailsFragment = AlarmDetailsFragment()
             val arguments = Bundle()
             arguments.putString("alarmKey", alarmKey)
+            Log.e(TAG, alarmKey)
             alarmDetailsFragment.arguments = arguments
 
             (view?.context as FragmentActivity)
                     .supportFragmentManager
                     .beginTransaction()
-                    .replace(R.id.fragment_container, AlarmDetailsFragment())
+                    .replace(R.id.fragment_container, alarmDetailsFragment)
                     .addToBackStack(null)
                     .commit()
         }

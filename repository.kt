@@ -68,7 +68,7 @@ class AlarmRepository {
                     val alarm = Alarm(snapshot?.key ?: "",
                             firebaseAlarm?.name ?: "",
                             firebaseAlarm?.time ?: "",
-                            firebaseAlarm.location ?: "")
+                            firebaseAlarm?.location ?: "")
                     mediatorLiveData.postValue(alarm)
                 }
 
@@ -83,11 +83,13 @@ class AlarmRepository {
         val fireBaseAlarm = FirebaseAlarm(alarm.name, alarm.time, alarm.location)
         when(alarm.key) {
             "" -> alarmRef.push().setValue(fireBaseAlarm)
-            else -> alarmRef.child(alarm.key).setValue(fireB)
+            else -> alarmRef.child(alarm.key).setValue(fireBaseAlarm)
         }
     }
 
     fun removeAlarm(alarm: Alarm) {
-
+        if (alarm.key != "") {
+            alarmRef.child(alarm.key).removeValue()
+        }
     }
 }

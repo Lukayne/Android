@@ -22,7 +22,7 @@ class AlarmDetailsFragment : LifecycleFragment() {
         val TAG = "AlarmDetailsFragment"
     }
 
-    var contactKey: String = ""
+    private var contactKey: String = ""
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
@@ -40,8 +40,22 @@ class AlarmDetailsFragment : LifecycleFragment() {
             val alarm: Alarm = it ?: Alarm("", "", "", "")
             contactKey = alarm.key
 
-            alarm
+            alarmStatus.text = alarm.name
+            alarmLocation.text = alarm.location
+            alarmPriority.text = alarm.time
+
+            deleteAlarm.visibility = when (aKey) {
+                "" -> View.GONE
+                else -> View.VISIBLE
+            }
+
+            deleteAlarm.setOnClickListener {
+                viewModel.removeAlarm(alarm)
+
+                fragmentManager.popBackStack()
+            }
         })
+
 
 
     }
